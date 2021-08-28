@@ -12,22 +12,21 @@ button {
                 0 0 0 4px black;
   }
 
-  .buttons button {
-    display: block;
-    float: left;
-    height: 50px;
-    width: 100px;
-    margin-right: 5px;
-    background-image: url(./images/button_left.png);
-    text-align: center;
-    line-height: 50px;
-    text-decoration: none;
+.relative {
+  padding: 10px;
+  position: relative;
+  background-color: #fff;
+  margin: 10px;
 }
 
-.buttons button.last {
-    margin-right: 0;
-}
-
-.clear {
-    clear: both;
+.navitem {
+  display: inline-block;
+  width: 70px;
+  height: 30px;
+  text-align: center;
+  border: gray;
+  background-color: #ac300a;
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  font-weight: bold;
 }
