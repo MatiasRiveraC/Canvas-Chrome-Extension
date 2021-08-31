@@ -98,6 +98,15 @@ div.ic-DashboardCard{
 div.headerBar{
     background-color: var(--primary-color) !important;
 }
+
+article.discussion_entry{
+    background: var(--primary-color) !important;
+}
+
+a.discussion-reply-box{
+    background: var(--primary-color) !important;
+}
+
 /*
 img.ic-sidebar-logo__image{
     -webkit-filter: invert(1);
