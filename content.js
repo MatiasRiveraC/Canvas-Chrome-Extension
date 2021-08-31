@@ -1,28 +1,51 @@
+let inject_html = `<div>
+                    <button  
+                      type='button' 
+                      id='DarkMode' 
+                      style='color:white; 
+                      background: red; 
+                      top: 8%; left: 87%;z-index: 999999;
+                      position: fixed; transform: translate(-50%, -50%);'
+                      >Dark mode
+                    </button>
+                    <button  
+                      type='button' 
+                      id='Files' 
+                      style='color:white; 
+                      background: red; 
+                      top: 8%; left: 91%;z-index: 999999;
+                      position: fixed; transform: translate(-50%, -50%);'
+                      >Files
+                    </button>
+                  </div>`;
+$(inject_html).appendTo("body");
+$('head').append('<link rel="stylesheet" href="style.css" type="text/css" />');
 
-document.addEventListener("DOMContentLoaded", setDarkmode());
-
-function setDarkmode(){
-    
-chrome.runtime.sendMessage({msg: "darkMode"}, function(response){
-    let darkMode = response.msg;
-    console.log(darkMode);
-  
-    if(darkMode){
-      
-
-      let extras = document.querySelectorAll(".ic-DashboardCard__header_image, .ic-DashboardCard__header_hero, .avatar");
-      extras.forEach((item) => {
-        item.style.filter = "invert(1) hue-rotate(180deg)"; 
-      });
-
-      let header = document.getElementById("header");
-      header.style.filter = "invert(1) hue-rotate(180deg)"; 
-
-      document.querySelector("body").style.filter = "invert(1) hue-rotate(180deg)";
-      document.body.style.backgroundColor = "#000000";
-      
-    }
-
-  });
+if(localStorage.getItem("theme") == null){
+  localStorage.setItem("theme", "light");
 }
+
+let localData = localStorage.getItem("theme");
+console.log(localData);
+
+if(localData == "light"){
+  document.body.classList.remove("dark-theme")
+
+}
+else{
+  document.body.classList.add("dark-theme");
+}
+
+$("#DarkMode").click(function(){
+  document.body.classList.toggle("dark-theme");
+  if(document.body.classList.contains("dark-theme")){
+    localStorage.setItem("theme", "dark");
+  }else{
+    localStorage.setItem("theme", "light");
+  }
+});
+
+$("#Files").click(function(){
+  window.location.href ="https://uandes.instructure.com/files";
+});
 

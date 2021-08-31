@@ -1,0 +1,106 @@
+:root{
+    --primary-color: #FFF;
+    --secondary-color: #FFF;
+}
+
+.dark-theme{
+    --primary-color: #000;
+    --secondary-color: rgb(29, 29, 29);
+}
+
+body{
+    background-color: var(--primary-color) !important;
+}
+
+div.ic-Dashboard-header__layout{
+    background-color: var(--primary-color) !important;
+}
+
+div.ic-DashboardCard__header_content{
+    background-color: var(--secondary-color) !important;
+}
+
+/* MODIFY SECONDAY COLOR*/
+nav.ic-DashboardCard__action-container{
+    background-color: var(--secondary-color) !important;
+}
+
+div.todo-details::after{
+    background: linear-gradient(to right, var(--primary-color))!important; 
+ 
+}
+
+div.event-details::after{
+    background: linear-gradient(to right, var(--primary-color))!important; 
+ 
+}
+
+tr.course-list-table-row{
+    background-color: var(--secondary-color) !important;
+}
+
+tr.course-list-unpublished-course-row{
+    background-color: var(--primary-color) !important;
+}
+
+/* MODIFY SECONDAY COLOR*/
+div.item-group-container{
+    background-color: var(--primary-color) !important;
+}
+
+/* MODIFY SECONDAY COLOR*/
+div.ig-row{
+    background-color: var(--primary-color) !important;
+}
+/* MODIFY SECONDAY COLOR*/
+div.ig-header{
+    background-color: var(--primary-color) !important;
+}
+/* MODIFY SECONDAY COLOR*/
+div.header-bar{
+    background-color: var(--primary-color) !important;
+}
+
+div.roster-tab{
+    background-color: var(--primary-color) !important;
+}
+
+div.tray-with-space-for-global-nav{
+    background-color: var(--secondary-color) !important;
+}
+
+div.module-sequence-footer-content{
+    background-color: var(--primary-color) !important;
+}
+
+#breadcrumbs{
+    background-color: var(--primary-color) !important;
+}
+div.pinned-discussions-v2__wrapper{
+    background-color: var(--primary-color) !important;
+}
+div.unpinned-discussions-v2__wrapper{
+    background-color: var(--primary-color) !important;
+}
+
+div.closed-for-comments-discussions-v2__wrapper{
+    background-color: var(--primary-color) !important;
+}
+
+div.ic-discussion-row{
+    background-color: var(--primary-color) !important;
+}
+
+div.ic-DashboardCard{
+    background: var(--secondary-color) !important;
+}
+
+div.headerBar{
+    background-color: var(--primary-color) !important;
+}
+/*
+img.ic-sidebar-logo__image{
+    -webkit-filter: invert(1);
+   filter: invert(1);
+}
+*/
