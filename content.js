@@ -3,22 +3,15 @@
 ################################*/
 
 let inject_html = `<div id='floating_menu'
-                      style='top: 8%; left: 87%;z-index: 999999;
-                      width:200px;height:100px;
-                      background-image: linear-gradient(to right, #494949, #d0cfcf); 
-                      position: fixed; transform: translate(-50%, -50%);
-                      border-radius: 15px;'>
+                      class='float_menu'
+                      >
                       <div id='btn_lay_1'
-                      style='display:flex;
-                      justify-content: space-around;'>
+                      class='float_menu_sub'
+                      >
                         <button  
                           type='button' 
                           id='DarkMode'
-                          style='color:white; 
-                          background: red;
-                          width:50px;height:50px;
-                          padding: 0px;
-                          border-radius: 15px;' 
+                          class='float_menu_top_btn'
                           >Dark
                         </button>
                         <input  
@@ -33,18 +26,13 @@ let inject_html = `<div id='floating_menu'
                         <button
                           type='button' 
                           id='ShowGradesBtn'
-                          style='color:white; 
-                          background: red;
-                          width:50px;height:50px;
-                          padding: 0px;
-                          border-radius: 15px;' 
+                          class='float_menu_top_btn'
                           >Grades
                         </button>
                       </div>
                       <div id='btn_lay_2'
-                      style='display:flex;
-                      justify-content: space-around;
-                      '>
+                      class='float_menu_sub'
+                      >
                       </div>
                   </div>`;
 $(inject_html).appendTo("body");
@@ -199,10 +187,9 @@ request.onload = () =>{
   //console.log(request);
   if(request.status == 200){
     let courses = JSON.parse(request.response);
-    console.log(courses);
+
     for(course of courses){
-      console.log(course.id)
-      console.log(course.name)
+
       if(colors.length == 0)
         color = "orange";
       else{
@@ -211,7 +198,7 @@ request.onload = () =>{
       removeArrValue(colors,color);
       let href = "href='https://uandes.instructure.com/courses/" +course.id+"'";
       document.getElementById("btn_lay_2").innerHTML += "<a "+ href + "><button title='" + course.name + "' style = 'border-radius: 25px; height:20px; width:20px; background:" + color + ";' ></button></a>";
-      console.log("<<-------------->>")
+   
     }
    
   }
@@ -269,11 +256,6 @@ function appendColumn() {
   let f_grades = clean_grades(grades);
   let f_possibles = clear_possibles(possibles);
   let counter = 0;
-  
-  for(let f of f_grades) console.log(f);
-  console.log("---------------------");
-  for(let f of f_possibles) console.log(f);
-      
 
 
   for (var i = 0; i < tbl.rows.length; i++) {
@@ -330,5 +312,3 @@ try{
 catch{
 
 }
-
-//token 9374~EkZZ44PZWTf10xEAy5cUYtPu1WwKqah8DfBfYh3XpdiicDIAo9kJVDshtfEfYrkR
