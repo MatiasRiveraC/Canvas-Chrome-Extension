@@ -1,26 +1,56 @@
-let inject_html = `<div>
-                    <button  
-                      type='button' 
-                      id='DarkMode' 
-                      style='color:white; 
-                      background: red; 
-                      top: 8%; left: 87%;z-index: 999999;
-                      position: fixed; transform: translate(-50%, -50%);'
-                      >Dark mode
-                    </button>
-                    <input  
-                      type='color' 
-                      id='color' 
-                      style='color:white; 
-                      background: red;
-                      width:20px;height:20px; 
-                      top: 8%; left: 91%;z-index: 999999;
-                      position: fixed; transform: translate(-50%, -50%);'
-                      >
-                    </input>
+/*##############################
+  INJECT FLOATING MENU
+################################*/
+
+let inject_html = `<div id='floating_menu'
+                      style='top: 8%; left: 87%;z-index: 999999;
+                      width:200px;height:100px;
+                      background-image: linear-gradient(to right, #494949, #d0cfcf); 
+                      position: fixed; transform: translate(-50%, -50%);
+                      border-radius: 15px;'>
+                      <div id='btn_lay_1'
+                      style='display:flex;
+                      justify-content: space-around;'>
+                        <button  
+                          type='button' 
+                          id='DarkMode'
+                          style='color:white; 
+                          background: red;
+                          width:50px;height:50px;
+                          padding: 0px;
+                          border-radius: 15px;' 
+                          >Dark
+                        </button>
+                        <input  
+                          type='color' 
+                          id='color' 
+                          style='color:white; 
+                          background: red;
+                          width:50px;height:50px;
+                          border-radius: 15px;'
+                          >
+                        </input>
+                        <button
+                          type='button' 
+                          id='ShowGradesBtn'
+                          style='color:white; 
+                          background: red;
+                          width:50px;height:50px;
+                          padding: 0px;
+                          border-radius: 15px;' 
+                          >Grades
+                        </button>
+                      </div>
+                      <div id='btn_lay_2'
+                      style='display:flex;
+                      justify-content: space-around;
+                      '>
+                      </div>
                   </div>`;
 $(inject_html).appendTo("body");
 $('head').append('<link rel="stylesheet" href="style.css" type="text/css" />');
+
+
 
 /*##############################
   CHANGE COLOR
@@ -147,3 +177,158 @@ $("#DarkMode").click(function(){
 });
 
 
+/*##############################
+  API CALLS
+################################*/
+
+function removeArrValue(arr,value) {
+  var index = arr.indexOf(value);
+  if (index > -1) {
+      arr.splice(index, 1);
+  }
+  return arr;
+}
+
+//https://uandes.instructure.com/api/v1/users/self/favorites/courses?include[]=term&exclude[]=enrollments&sort=nickname   GET
+let colors = ["red", "cyan", "orange", "yellow", "green", "purple", "blue"];
+let color = "gray";
+const request = new XMLHttpRequest();
+request.open("GET", "https://uandes.instructure.com/api/v1/users/self/favorites/courses?include[]=term&exclude[]=enrollments&sort=nickname");
+request.send();
+request.onload = () =>{
+  //console.log(request);
+  if(request.status == 200){
+    let courses = JSON.parse(request.response);
+    console.log(courses);
+    for(course of courses){
+      console.log(course.id)
+      console.log(course.name)
+      if(colors.length == 0)
+        color = "orange";
+      else{
+        color = colors[0];
+      }
+      removeArrValue(colors,color);
+      let href = "href='https://uandes.instructure.com/courses/" +course.id+"'";
+      document.getElementById("btn_lay_2").innerHTML += "<a "+ href + "><button title='" + course.name + "' style = 'border-radius: 25px; height:20px; width:20px; background:" + color + ";' ></button></a>";
+      console.log("<<-------------->>")
+    }
+   
+  }
+}
+
+/*##############################
+  GRADE
+################################*/
+function clean_grades(grades){
+  let f_grades = []
+  for(let grade of grades) {
+    let gradeStr = $(grade).text();
+    let trash = ['Haga clic para probar un puntaje diferente'];
+    let trash2 = ['El profesor no ha publicado esta calificación'];
+    while(gradeStr.includes(trash)){
+      gradeStr = gradeStr.replace(trash, '');
+    }
+    while(gradeStr.includes(trash2)){
+      gradeStr = gradeStr.replace(trash2, '');
+    }
+    if(gradeStr.includes('-')) gradeStr = '0';
+    if(gradeStr.includes('Entrega del examen')) gradeStr = '0';
+    
+  
+    f_grades.push(gradeStr.trim());
+  }
+  return f_grades;
+}
+
+function clear_possibles(possibles){
+  let f_possibles = []
+  for(let possible of possibles){
+    let possibleStr = $(possible).text();
+  
+  
+    f_possibles.push(possibleStr.trim());
+  }
+  return f_possibles;
+}
+
+function createCell(cell, text, style) {
+  var div = document.createElement('div'),
+      txt = document.createTextNode(text); 
+  div.appendChild(txt);                    
+  div.setAttribute('class', style);       
+  div.setAttribute('className', style);  
+  cell.appendChild(div);                   
+}
+
+function appendColumn() {
+  var tbl = document.getElementById('grades_summary');
+
+  var grades = document.getElementsByClassName("grade");
+  var possibles = document.getElementsByClassName("points_possible");
+  let f_grades = clean_grades(grades);
+  let f_possibles = clear_possibles(possibles);
+  let counter = 0;
+  
+  for(let f of f_grades) console.log(f);
+  console.log("---------------------");
+  for(let f of f_possibles) console.log(f);
+      
+
+
+  for (var i = 0; i < tbl.rows.length; i++) {
+   
+    if(tbl.rows[i].id.includes("submission")){
+      if(tbl.rows[i].id.includes("group") || tbl.rows[i].id.includes("final")){
+        let values = f_possibles[counter].split("/");
+        let num = 1+6*values[0]/values[1];
+
+        createCell(tbl.rows[i].insertCell(tbl.rows[i].cells.length), Math.round(num * 100) / 100, 'grade_value');
+        counter ++;
+    
+      }
+      else{
+        let num = 1+6*f_grades[counter]/f_possibles[counter];
+
+        createCell(tbl.rows[i].insertCell(tbl.rows[i].cells.length), Math.round(num * 100) / 100, 'grade_value');
+        counter ++;
+      }
+      
+    }
+  }
+}
+
+if(localStorage.getItem("grade") == null){
+  localStorage.setItem("grade", "off");
+}
+
+let localGradeCheck = localStorage.getItem("grade");
+
+
+if(localGradeCheck == "off"){
+  document.body.classList.remove("grades-show")
+
+}
+else{
+  document.body.classList.add("grades-show");
+}
+
+$("#ShowGradesBtn").click(function(){
+  document.body.classList.toggle("grades-show");
+  if(document.body.classList.contains("grades-show")){
+    localStorage.setItem("grade", "on");
+    
+  }else{
+    localStorage.setItem("grade", "off");
+  }
+});
+
+
+try{
+  appendColumn();
+}
+catch{
+
+}
+
+//token 9374~EkZZ44PZWTf10xEAy5cUYtPu1WwKqah8DfBfYh3XpdiicDIAo9kJVDshtfEfYrkR
