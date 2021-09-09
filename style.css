@@ -2,12 +2,13 @@
     --primary-color: #FFF;
     --secondary-color: #FFF;
     --displayed: initial;
+    --image_filter: invert(0);
 }
 
 .dark-theme{
     --primary-color: #000;
     --secondary-color: rgb(29, 29, 29);
-
+    --image_filter: invert(1);
 }
 /*
     GRADES
@@ -45,6 +46,9 @@ button.float_menu_top_btn{
     END
 */
 
+img.ic-sidebar-logo__image{
+    filter: var(--image_filter) !important;
+}
 
 
 div.grade_value{
