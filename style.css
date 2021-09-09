@@ -23,7 +23,7 @@
 
 div.float_menu{
     top: 8%; left: 87%;z-index: 999999;
-    width:200px;height:100px;
+    width:200px;height:120px;
     background-image: linear-gradient(to right, #494949, #d0cfcf); 
     position: fixed; transform: translate(-50%, -50%);
     border-radius: 15px;

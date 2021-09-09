@@ -34,6 +34,10 @@ let inject_html = `<div id='floating_menu'
                       class='float_menu_sub'
                       >
                       </div>
+                      <div id='btn_lay_3'
+                      class='float_menu_sub'
+                      >
+                      </div>
                   </div>`;
 $(inject_html).appendTo("body");
 $('head').append('<link rel="stylesheet" href="style.css" type="text/css" />');
@@ -177,6 +181,8 @@ function removeArrValue(arr,value) {
   return arr;
 }
 
+
+let coursesID = []; //all courses IDs
 //https://uandes.instructure.com/api/v1/users/self/favorites/courses?include[]=term&exclude[]=enrollments&sort=nickname   GET
 let colors = ["red", "cyan", "orange", "yellow", "green", "purple", "blue"];
 let color = "gray";
@@ -189,7 +195,7 @@ request.onload = () =>{
     let courses = JSON.parse(request.response);
 
     for(course of courses){
-
+      coursesID.push(course.id);
       if(colors.length == 0)
         color = "orange";
       else{
@@ -198,11 +204,70 @@ request.onload = () =>{
       removeArrValue(colors,color);
       let href = "href='https://uandes.instructure.com/courses/" +course.id+"'";
       document.getElementById("btn_lay_2").innerHTML += "<a "+ href + "><button title='" + course.name + "' style = 'border-radius: 25px; height:20px; width:20px; background:" + color + ";' ></button></a>";
-   
+
     }
+
+    //https://uandes.instructure.com/feeds/calendars/course_mDtcjS1Bhrg2aZNWMtrkVFw2AjNh0AnX4i7T7KK3.ics
+    //json.calendar.ics
+    //course = json.uuid
    
   }
 }
+
+let coursesOrder = Array(coursesID.length); //order array
+
+/*##############################
+  API USER ID & API FUNCTION
+##############################*/
+
+
+
+
+const request3 = new XMLHttpRequest();
+request3.open("GET", "https://uandes.instructure.com/api/v1/users/self"); // GET USER ID & current_score /100 = > NF*6 +1
+request3.send();
+request3.onload = () =>{
+  //console.log(request3);
+  if(request3.status == 200){
+    let courses3 = JSON.parse(request3.response);
+
+    //console.log(courses3.id);
+
+    const request2 = new XMLHttpRequest();
+    let userID =courses3.id; 
+    request2.open("GET", "https://uandes.instructure.com/api/v1/users/"+ userID+ "/enrollments"); // GET USER ID & current_score /100 = > NF*6 +1
+    request2.send();
+    request2.onload = () =>{
+      //console.log(request2);
+      if(request2.status == 200){
+        let courses2 = JSON.parse(request2.response);
+
+        //console.log(courses2);
+        for(course of courses2){
+          let indexCourse = coursesID.indexOf(course.course_id);
+          coursesOrder[indexCourse] = course.grades.current_score;
+        }
+        //console.log(coursesOrder);
+        let counter = 0;
+        for(grade of coursesOrder){
+          let NF = (grade/100)*6 +1;
+          NF = Math.round(NF * 10) / 10
+          //console.log(NF);
+
+          //add NF to html
+          let href = "href='https://uandes.instructure.com/courses/" +coursesID[counter]+"/grades'"; 
+          document.getElementById("btn_lay_3").innerHTML += "<a "+ href + "><button style = 'border-radius: 25px; height:30px; width:30px; padding: 0px;' >"+ NF+ "</button></a>";
+          counter++;
+        }
+
+        
+      }
+    }
+
+  }
+}
+
+
 
 /*##############################
   GRADE
@@ -247,6 +312,7 @@ function createCell(cell, text, style) {
   div.setAttribute('className', style);  
   cell.appendChild(div);                   
 }
+
 
 function appendColumn() {
   var tbl = document.getElementById('grades_summary');
@@ -312,3 +378,4 @@ try{
 catch{
 
 }
+
