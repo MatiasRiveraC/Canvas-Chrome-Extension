@@ -181,6 +181,8 @@ function removeArrValue(arr,value) {
   return arr;
 }
 
+//https://uandes.instructure.com/dashboard-sidebar LISTA ACTIVIDADES
+
 
 let coursesID = []; //all courses IDs
 //https://uandes.instructure.com/api/v1/users/self/favorites/courses?include[]=term&exclude[]=enrollments&sort=nickname   GET
@@ -203,7 +205,7 @@ request.onload = () =>{
       }
       removeArrValue(colors,color);
       let href = "href='https://uandes.instructure.com/courses/" +course.id+"'";
-      document.getElementById("btn_lay_2").innerHTML += "<a "+ href + "><button title='" + course.name + "' style = 'border-radius: 25px; height:20px; width:20px; background:" + color + ";' ></button></a>";
+      document.getElementById("btn_lay_2").innerHTML += "<a "+ href + "><button title='" + course.name + "' style = 'border-radius: 25px; height:30px; width:30px; padding: 0px; background:" + color + ";' >" + course.name.substring(0,2) + "</button></a>";
 
     }
 

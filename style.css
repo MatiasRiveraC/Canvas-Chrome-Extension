@@ -1,6 +1,8 @@
 :root{
     --primary-color: #FFF;
     --secondary-color: #FFF;
+    --third-color: #e8e8e8;
+    --fourth-color: #f5f5f5;
     --displayed: initial;
     --image_filter: invert(0);
 }
@@ -8,6 +10,8 @@
 .dark-theme{
     --primary-color: #000;
     --secondary-color: rgb(29, 29, 29);
+    --third-color: #131313;
+    --fourth-color: #000000;
     --image_filter: invert(1);
 }
 /*
@@ -23,7 +27,7 @@
 
 div.float_menu{
     top: 8%; left: 87%;z-index: 999999;
-    width:200px;height:120px;
+    width:200px;height:125px;
     background-image: linear-gradient(to right, #494949, #d0cfcf); 
     position: fixed; transform: translate(-50%, -50%);
     border-radius: 15px;
@@ -45,6 +49,9 @@ button.float_menu_top_btn{
 /*
     END
 */
+.Button:hover{
+    background: var(--third-color) !important;
+}
 
 img.ic-sidebar-logo__image{
     filter: var(--image_filter) !important;
@@ -169,6 +176,22 @@ td.fc-today{
     background: var(--secondary-color) !important;
 }
 
+a.Button{
+    background: var(--fourth-color) !important;
+}
+
+.btn{
+    background: var(--fourth-color) !important;
+}
+
+.ic-Table.ic-Table--striped tbody tr:nth-child(odd) {
+    background-color: var(--fourth-color) !important;
+}
+    /*
+.Button{
+    background: var(--fourth-color) !important;
+}
+*/
 /*
 img.ic-sidebar-logo__image{
     -webkit-filter: invert(1);
