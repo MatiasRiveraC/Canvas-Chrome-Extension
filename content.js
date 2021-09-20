@@ -54,7 +54,9 @@ window.addEventListener('load', function () {
     localStorage.setItem("color", "#2d3b45");
   }
   
+  
   let color = localStorage.getItem("color");
+  document.getElementById('color').value = color; //set input color to local storage value
 
   let nodesSpan = document.querySelectorAll('span');
   for(let node of nodesSpan) node.style.color = color;
@@ -185,8 +187,9 @@ function removeArrValue(arr,value) {
 
 
 let coursesID = []; //all courses IDs
+let coursesJson = []; //first name then id
 //https://uandes.instructure.com/api/v1/users/self/favorites/courses?include[]=term&exclude[]=enrollments&sort=nickname   GET
-let colors = ["red", "cyan", "orange", "yellow", "green", "purple", "blue"];
+let colors = ["#ff0000", "#00EEFF", "#FF6F00", "#FFEE00", "#00ff00", "#ff00ff", "#0000ff"];
 let color = "gray";
 const request = new XMLHttpRequest();
 request.open("GET", "https://uandes.instructure.com/api/v1/users/self/favorites/courses?include[]=term&exclude[]=enrollments&sort=nickname");
@@ -199,15 +202,31 @@ request.onload = () =>{
     for(course of courses){
       coursesID.push(course.id);
       if(colors.length == 0)
-        color = "orange";
+        color = "#FF6F00";
       else{
         color = colors[0];
       }
+
       removeArrValue(colors,color);
+      if(localStorage.getItem(course.id) == null){ // check if course id != null in localstorage
+        localStorage.setItem(course.id, color);
+      }
+      else{
+        color = localStorage.getItem(course.id); //else get localstorage value
+      }
+
+ 
+      coursesJson.push({"id": course.id, "name":course.name, "color":color}); //array of jsons
       let href = "href='https://uandes.instructure.com/courses/" +course.id+"'";
       document.getElementById("btn_lay_2").innerHTML += "<a "+ href + "><button title='" + course.name + "' style = 'border-radius: 25px; height:30px; width:30px; padding: 0px; background:" + color + ";' >" + course.name.substring(0,2) + "</button></a>";
 
     }
+    
+    //localStorage.setItem("courses", JSON.stringify(coursesJson));
+
+    chrome.storage.local.set({ "courses": coursesJson }, function(){
+     
+    });
 
     //https://uandes.instructure.com/feeds/calendars/course_mDtcjS1Bhrg2aZNWMtrkVFw2AjNh0AnX4i7T7KK3.ics
     //json.calendar.ics
