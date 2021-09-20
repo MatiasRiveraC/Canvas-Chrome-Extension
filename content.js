@@ -18,7 +18,7 @@ let inject_html = `<div id='floating_menu'
                           type='color' 
                           id='color' 
                           style='color:white; 
-                          background: red;
+                          background: #B8B7B7;
                           width:50px;height:50px;
                           border-radius: 15px;'
                           >
@@ -36,6 +36,10 @@ let inject_html = `<div id='floating_menu'
                       </div>
                       <div id='btn_lay_3'
                       class='float_menu_sub'
+                      >
+                      </div>
+                      <div id='announce_lay'
+                      class='announce_sub'
                       >
                       </div>
                   </div>`;
@@ -221,8 +225,8 @@ request.onload = () =>{
       */
  
       
-      
-      if(coursesGET != null){
+
+      if(Object.keys(coursesGET).length != 0){
         for(courseGET of coursesGET.courses){
 
           if(courseGET.id == course.id){
@@ -306,6 +310,30 @@ request3.onload = () =>{
   }
 }
 
+//https://uandes.instructure.com/api/v1/planner/items?start_date=2021-09-20T03:00:00.000Z GET
+
+const request4 = new XMLHttpRequest();
+request4.open("GET", "https://uandes.instructure.com/api/v1/planner/items?start_date=2021-09-20T03:00:00.000Z"); 
+request4.send();
+request4.onload = () =>{
+  //console.log(request4);
+  if(request4.status == 200){
+    let resp = JSON.parse(request4.response);
+    console.log(resp);
+    //context_name UANDES al dia
+    //plannable.title Giving Day, Casting Pasapalabra, Concurso de Fotografía y mucho más
+    //plannable_date 2021-09-20T15:04:56Z
+    //html_url "/courses/12134/discussion_topics/138911"
+    let counter =0;
+    for(announce of resp){
+      if(counter == 4) break;
+      if(announce.plannable_type == "quiz" || announce.plannable_type == "assignment"){
+        document.getElementById("announce_lay").innerHTML += "<div class='announce_subLay'><p>" + announce.context_name +"</p>" +announce.plannable_date.split("T")[0]+"<p></p><a href='" + announce.html_url+"'><p>" + announce.plannable.title +"</p></a></div>";
+        counter++;
+      }
+    }
+  }
+}
 
 
 /*##############################
