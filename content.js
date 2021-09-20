@@ -197,8 +197,11 @@ request.send();
 request.onload = () =>{
   //console.log(request);
   if(request.status == 200){
-    let courses = JSON.parse(request.response);
+    
 
+    //GET CHROME VALUES COLOR INSIDE THIS FOR LOOP (IT A THREAD)
+    chrome.storage.local.get(["courses"], function(coursesGET){
+    let courses = JSON.parse(request.response);
     for(course of courses){
       coursesID.push(course.id);
       if(colors.length == 0)
@@ -208,16 +211,31 @@ request.onload = () =>{
       }
 
       removeArrValue(colors,color);
+      /*
       if(localStorage.getItem(course.id) == null){ // check if course id != null in localstorage
         localStorage.setItem(course.id, color);
       }
       else{
         color = localStorage.getItem(course.id); //else get localstorage value
       }
-
+      */
  
+      
+      
+      if(coursesGET != null){
+        for(courseGET of coursesGET.courses){
+
+          if(courseGET.id == course.id){
+   
+            color = courseGET.color;
+            
+            break;
+          }
+        }
+      }
       coursesJson.push({"id": course.id, "name":course.name, "color":color}); //array of jsons
       let href = "href='https://uandes.instructure.com/courses/" +course.id+"'";
+
       document.getElementById("btn_lay_2").innerHTML += "<a "+ href + "><button title='" + course.name + "' style = 'border-radius: 25px; height:30px; width:30px; padding: 0px; background:" + color + ";' >" + course.name.substring(0,2) + "</button></a>";
 
     }
@@ -231,7 +249,7 @@ request.onload = () =>{
     //https://uandes.instructure.com/feeds/calendars/course_mDtcjS1Bhrg2aZNWMtrkVFw2AjNh0AnX4i7T7KK3.ics
     //json.calendar.ics
     //course = json.uuid
-   
+  });
   }
 }
 

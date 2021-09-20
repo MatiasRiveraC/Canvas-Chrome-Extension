@@ -1,10 +1,24 @@
 var ColorPicker = function(event){
     console.log(event.target.value);
+    
+    let courseId  = event.target.id.substring(1);
+    console.log(courseId);
     //save color value to id on globalCourses
+
+    for(course of globalCourses){
+        if(course.id == courseId){
+            course.color = event.target.value;
+        }
+    }
+   
 }
 
 function saveChanges(){
     console.log("Values saved!");
+    console.log(globalCourses);
+    chrome.storage.local.set({ "courses": globalCourses }, function(){
+     
+    });
     //save json to chrome.storage
 }
 
