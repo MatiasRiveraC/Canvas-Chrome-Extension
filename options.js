@@ -17,8 +17,9 @@ function saveChanges(){
     console.log("Values saved!");
     console.log(globalCourses);
     chrome.storage.local.set({ "courses": globalCourses }, function(){
-     
+        
     });
+    window.location.reload();
     //save json to chrome.storage
 }
 
@@ -30,6 +31,7 @@ chrome.storage.local.get(["courses"], function(courses){
     for(course of globalCourses){ //setting up divs
 
         document.getElementById("mainDiv").innerHTML += '<div class=subContainer><p class=courseName>'+ course.name + "</p><input id ='I" + course.id+"'type='color' value='" + course.color+"'></input></div>";
+        document.getElementById("preview").innerHTML += "<button title='" + course.name + "' style = 'border-radius: 25px; height:30px; width:30px; padding: 0px; background:" + course.color + ";' >" + course.name.substring(0,2) + "</button>";
     }
     document.getElementById("footDiv").innerHTML += '<button id=saveBtn>Save changes</button>'; //save Btn
     document.getElementById("saveBtn").addEventListener("click", saveChanges, false);
