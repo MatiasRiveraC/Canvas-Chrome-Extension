@@ -44,7 +44,7 @@ div.assigntmentBtn{
 
 div.float_menu{
     top: 9%; left: 87%;z-index: 999999;
-    width:200px;height:150px;
+    width:auto;height:150px;
     background-color: #d0cfcf;
     /*background-image: linear-gradient(to right, #494949, #d0cfcf); */
     position: fixed; transform: translate(-50%, -50%);

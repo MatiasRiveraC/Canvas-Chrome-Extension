@@ -197,7 +197,13 @@ request3.onload = () =>{
         //console.log(courses2);
         for(course of courses2){
           let indexCourse = coursesID.indexOf(course.course_id);
-          coursesOrder[indexCourse] = course.grades.current_score;
+          try{
+            coursesOrder[indexCourse] = course.grades.current_score;
+          }
+          catch (e){
+            coursesOrder[indexCourse] = 1
+          }
+
         }
         //console.log(coursesOrder);
         let counter = 0;
@@ -223,11 +229,12 @@ request3.onload = () =>{
 
 const request4 = new XMLHttpRequest();
 var d = new Date();
+var year = d.getYear() + 1900; 
 var month = d.getMonth() + 1;
 var day = d.getDate(); 
 month = ('0' + month).slice(-2);
 day = ('0' + day).slice(-2);
-request4.open("GET", "https://uandes.instructure.com/api/v1/planner/items?start_date=2021-"+ month + "-"+ day+ "T03:00:00.000Z"); 
+request4.open("GET", `https://uandes.instructure.com/api/v1/planner/items?start_date=${year}-${month}-${day}T03:00:00.000Z`); 
 request4.send();
 request4.onload = () =>{
   //console.log(request4);
@@ -240,7 +247,7 @@ request4.onload = () =>{
     //html_url "/courses/12134/discussion_topics/138911"
     let counter =0;
     for(announce of resp){
-      if(counter == 5) break;
+      if(counter == 4) break;
       if(announce.plannable_type == "quiz" || announce.plannable_type == "assignment"){ 
         document.getElementById("announce_lay").innerHTML += "<div class='announce_subLay'><p>" + announce.context_name +"</p><p>" +announce.plannable_date.split("T")[0]+"</p><a href='" + announce.html_url+"'><p style='text-decoration: underline;'>" + announce.plannable.title +"</p></a></div>";
         counter++;
